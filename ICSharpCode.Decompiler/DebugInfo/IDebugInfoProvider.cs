@@ -25,4 +25,31 @@ namespace ICSharpCode.Decompiler.DebugInfo
 		bool TryGetName(MethodDefinitionHandle method, int index, out string name);
 		string SourceFileName { get; }
 	}
+
+	public sealed class NullDebugInfoProvider : IDebugInfoProvider
+	{
+		public static NullDebugInfoProvider Instance { get; } = new NullDebugInfoProvider("Not Available");
+
+		public NullDebugInfoProvider(string description, string sourceFileName = null)
+		{
+			this.Description = description ?? throw new ArgumentNullException(nameof(description));
+			this.SourceFileName = sourceFileName;
+		}
+
+		public string Description { get; }
+
+		IList<SequencePoint> IDebugInfoProvider.GetSequencePoints(MethodDefinitionHandle method)
+			=> Array.Empty<SequencePoint>();
+
+		IList<Variable> IDebugInfoProvider.GetVariables(MethodDefinitionHandle method)
+			=> Array.Empty<Variable>();
+
+		bool IDebugInfoProvider.TryGetName(MethodDefinitionHandle method, int index, out string name)
+		{
+			name = null;
+			return false;
+		}
+
+		public string SourceFileName { get; }
+	}
 }

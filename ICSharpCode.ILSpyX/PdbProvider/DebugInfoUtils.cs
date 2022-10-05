@@ -52,13 +52,17 @@ namespace ICSharpCode.ILSpyX.PdbProvider
 					{
 						return new MonoCecilDebugInfoProvider(module, pdbFileName);
 					}
+					else
+					{
+						return new NullDebugInfoProvider("Doesn't Exist", pdbFileName);
+					} 
 				}
 			}
-			catch (Exception ex) when (ex is BadImageFormatException || ex is COMException)
+			catch (Exception ex) when (ex is BadImageFormatException || ex is COMException || ex is IOException)
 			{
+				return new NullDebugInfoProvider(ex.Message);
 				// Ignore PDB load errors
 			}
-			return null;
 		}
 
 		public static IDebugInfoProvider? FromFile(PEFile module, string pdbFileName)

@@ -212,6 +212,10 @@ namespace ICSharpCode.ILSpy.TreeNodes
 			{
 				this.Children.Add(new Metadata.DebugMetadataTreeNode(module, ppdb.IsEmbedded, reader));
 			}
+			else
+			{
+				this.Children.Add(new Metadata.DebugInfoProviderTreeNode(debugInfo));
+			}
 			this.Children.Add(new ReferenceFolderTreeNode(module, this));
 			if (module.Resources.Any())
 				this.Children.Add(new ResourceListTreeNode(module));
